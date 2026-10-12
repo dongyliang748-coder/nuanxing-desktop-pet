@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<title>公众号排版版 · 桌面右下角多了一个会看着你的东西</title>
+</head>
+<body>
+<!-- 直接全选下面的内容，复制粘贴到微信公众号编辑器即可，样式会一起带过去 -->
+
+<section style="font-size:15px;line-height:1.75;color:#3f3f3f;letter-spacing:0.5px;">
+
+<p style="margin:0 0 22px;">不是壁纸，不是壁纸引擎，是一个真正会盯着你光标、会提醒你喝水的桌面NPC。</p>
+
+<h2 style="font-size:19px;font-weight:bold;color:#1a1a1a;margin:34px 0 18px;border-left:4px solid #e8a58c;padding-left:11px;">起因就是一句话</h2>
+
+<p style="margin:0 0 20px;">我随口问了一句："能不能做个桌面宠物？"</p>
+
+<p style="margin:0 0 20px;">然后它就出现在屏幕右下角了——一个戴着粉色墨镜、穿奶油白外套的Q版小人，安静地站着，偶尔呼吸时身体轻微起伏。</p>
+
+<p style="margin:0 0 20px;">关键在于：<strong style="color:#e8a58c;">它的视线会跟着你的鼠标转。</strong></p>
+
+<p style="margin:0 0 20px;">你往左上角移动光标，它的脑袋就往左上偏；你把光标停在任务栏，它就低头看你。不是简单的整体旋转，是 16 个方向各自一张的表情——每一帧都是正儿八经画出来的转头姿态。</p>
+
+<p style="margin:0 0 22px;">第一次看到它真的转头看我，那种感觉挺奇妙的。</p>
+
+<h2 style="font-size:19px;font-weight:bold;color:#1a1a1a;margin:34px 0 18px;border-left:4px solid #e8a58c;padding-left:11px;">第一步不是写代码，是翻箱倒柜</h2>
+
+<p style="margin:0 0 20px;">做桌宠，最难的不是程序，是素材。</p>
+
+<p style="margin:0 0 20px;">我早就有一套宠物精灵图，是一张 1536×2288 的雪碧图——8 列 × 11 行，每个格子 192×208，一共 73 帧。问题是它散落在某个陈年目录里，而且当时没留下任何说明文档。</p>
+
+<p style="margin:0 0 20px;">所以第一步是：<strong style="color:#e8a58c;">找到它，并且确认它是对的。</strong></p>
+
+<p style="margin:0 0 20px;">找素材花了点时间，但确认版本只花了 3 秒——当初留了一份 SHA-256 校验值：</p>
+
+<pre style="background:#f7f7f7;padding:13px 15px;border-radius:5px;font-size:13px;line-height:1.6;color:#555;overflow-x:auto;margin:0 0 20px;font-family:Consolas,Monaco,monospace;">6d47b076731878061bc80a398e743afa68b690001584410545a1ef928066a94e</pre>
+
+<p style="margin:0 0 20px;">复制过来重新算一遍，一致。</p>
+
+<p style="margin:0 0 22px;">这一步看着多余，但很重要。<strong>当你从一堆备份里翻出同名文件时，你怎么知道哪个是最终版？</strong>哈希会告诉你。它比"我记得是这个"可靠得多。</p>
+
+<h2 style="font-size:19px;font-weight:bold;color:#1a1a1a;margin:34px 0 18px;border-left:4px solid #e8a58c;padding-left:11px;">读懂一张图：73 帧里藏着什么</h2>
+
+<p style="margin:0 0 20px;">雪碧图本身不带任何注释。要让它动起来，得知道每一行是什么动作。</p>
+
+<p style="margin:0 0 20px;">万幸，原项目还留着一个 <code style="background:#f2f2f2;padding:1px 5px;border-radius:3px;font-size:13px;">pet_request.json</code>。翻开它，答案一目了然：</p>
+
+<table style="border-collapse:collapse;width:100%;font-size:13.5px;margin:0 0 20px;">
+<thead>
+<tr style="background:#faf4f0;">
+<th style="border:1px solid #e8ddd5;padding:8px 10px;text-align:left;">行</th>
+<th style="border:1px solid #e8ddd5;padding:8px 10px;text-align:left;">动作</th>
+<th style="border:1px solid #e8ddd5;padding:8px 10px;text-align:left;">帧数</th>
+<th style="border:1px solid #e8ddd5;padding:8px 10px;text-align:left;">干什么用</th>
+</tr>
+</thead>
+<tbody>
+<tr><td style="border:1px solid #e8ddd5;padding:7px 10px;">0</td><td style="border:1px solid #e8ddd5;padding:7px 10px;">idle</td><td style="border:1px solid #e8ddd5;padding:7px 10px;">6</td><td style="border:1px solid #e8ddd5;padding:7px 10px;">待机呼吸、眨眼</td></tr>
+<tr><td style="border:1px solid #e8ddd5;padding:7px 10px;">1</td><td style="border:1px solid #e8ddd5;padding:7px 10px;">running-right</td><td style="border:1px solid #e8ddd5;padding:7px 10px;">8</td><td style="border:1px solid #e8ddd5;padding:7px 10px;">向右移动</td></tr>
+<tr><td style="border:1px solid #e8ddd5;padding:7px 10px;">2</td><td style="border:1px solid #e8ddd5;padding:7px 10px;">running-left</td><td style="border:1px solid #e8ddd5;padding:7px 10px;">8</td><td style="border:1px solid #e8ddd5;padding:7px 10px;">向左移动</td></tr>
+<tr><td style="border:1px solid #e8ddd5;padding:7px 10px;">3</td><td style="border:1px solid #e8ddd5;padding:7px 10px;">waving</td><td style="border:1px solid #e8ddd5;padding:7px 10px;">4</td><td style="border:1px solid #e8ddd5;padding:7px 10px;">打招呼</td></tr>
+<tr><td style="border:1px solid #e8ddd5;padding:7px 10px;">4</td><td style="border:1px solid #e8ddd5;padding:7px 10px;">jumping</td><td style="border:1px solid #e8ddd5;padding:7px 10px;">5</td><td style="border:1px solid #e8ddd5;padding:7px 10px;">跳跃</td></tr>
+<tr><td style="border:1px solid #e8ddd5;padding:7px 10px;">5</td><td style="border:1px solid #e8ddd5;padding:7px 10px;">failed</td><td style="border:1px solid #e8ddd5;padding:7px 10px;">8</td><td style="border:1px solid #e8ddd5;padding:7px 10px;">失败 / 被拒绝</td></tr>
+<tr><td style="border:1px solid #e8ddd5;padding:7px 10px;">6</td><td style="border:1px solid #e8ddd5;padding:7px 10px;">waiting</td><td style="border:1px solid #e8ddd5;padding:7px 10px;">6</td><td style="border:1px solid #e8ddd5;padding:7px 10px;">等待输入</td></tr>
+<tr><td style="border:1px solid #e8ddd5;padding:7px 10px;">7</td><td style="border:1px solid #e8ddd5;padding:7px 10px;">running</td><td style="border:1px solid #e8ddd5;padding:7px 10px;">6</td><td style="border:1px solid #e8ddd5;padding:7px 10px;">处理任务中</td></tr>
+<tr><td style="border:1px solid #e8ddd5;padding:7px 10px;">8</td><td style="border:1px solid #e8ddd5;padding:7px 10px;">review</td><td style="border:1px solid #e8ddd5;padding:7px 10px;">6</td><td style="border:1px solid #e8ddd5;padding:7px 10px;">呈现结果</td></tr>
+<tr><td style="border:1px solid #e8ddd5;padding:7px 10px;">9</td><td style="border:1px solid #e8ddd5;padding:7px 10px;">look</td><td style="border:1px solid #e8ddd5;padding:7px 10px;">8</td><td style="border:1px solid #e8ddd5;padding:7px 10px;">视线 000°→157.5°</td></tr>
+<tr><td style="border:1px solid #e8ddd5;padding:7px 10px;">10</td><td style="border:1px solid #e8ddd5;padding:7px 10px;">look</td><td style="border:1px solid #e8ddd5;padding:7px 10px;">8</td><td style="border:1px solid #e8ddd5;padding:7px 10px;">视线 180°→337.5°</td></tr>
+</tbody>
+</table>
+
+<p style="margin:0 0 20px;">更妙的是，我还在项目里找到了一个当时用来导出预览 GIF 的 Python 脚本，脚本里写死了<strong>每一帧的持续时间</strong>（毫秒）：</p>
+
+<pre style="background:#f7f7f7;padding:13px 15px;border-radius:5px;font-size:13px;line-height:1.6;color:#555;overflow-x:auto;margin:0 0 20px;font-family:Consolas,Monaco,monospace;">("idle", 6, [280, 110, 110, 140, 140, 320]),
+("running-right", 8, [120, 120, ...]),</pre>
+
+<p style="margin:0 0 20px;">也就是说，这套动画的原始节奏是有据可查的。我没有去"猜"一个看起来舒服的速度，而是直接照搬——呼吸吸得长、呼得短，眨眼快，帧间的停顿全都是设计过的。</p>
+
+<p style="margin:0 0 22px;"><strong style="color:#e8a58c;">这是复用素材最大的好处：你继承的不只是图，还有当初的审美判断。</strong></p>
+
+<h2 style="font-size:19px;font-weight:bold;color:#1a1a1a;margin:34px 0 18px;border-left:4px solid #e8a58c;padding-left:11px;">让它浮在桌面上</h2>
+
+<p style="margin:0 0 20px;">技术选型上没有犹豫：<strong>Electron</strong>。透明窗口、自定义交互、HTML/CSS 做气泡和菜单，比 Python 手写 UI 舒服太多。</p>
+
+<p style="margin:0 0 18px;">几个必须处理到位的点：</p>
+
+<p style="margin:0 0 14px;"><strong style="color:#e8a58c;">1. 窗口要完全透明</strong></p>
+
+<pre style="background:#f7f7f7;padding:13px 15px;border-radius:5px;font-size:13px;line-height:1.6;color:#555;overflow-x:auto;margin:0 0 20px;font-family:Consolas,Monaco,monospace;">transparent: true,
+frame: false,
+hasShadow: false,
+skipTaskbar: true,
+alwaysOnTop: true</pre>
+
+<p style="margin:0 0 14px;"><strong style="color:#e8a58c;">2. 不能挡住你干活</strong></p>
+
+<p style="margin:0 0 20px;">这点是决定体验好坏的分水岭。宠物窗口实打实占着屏幕右下角 320×400 的一块地，如果整块拦截鼠标，这一片就废了。</p>
+
+<p style="margin:0 0 20px;">正确做法是<strong>按需穿透</strong>：鼠标没在宠物身上时，窗口完全透传点击，你的操作落到下面的窗口；鼠标进入宠物范围，窗口立刻接管。</p>
+
+<pre style="background:#f7f7f7;padding:13px 15px;border-radius:5px;font-size:13px;line-height:1.6;color:#555;overflow-x:auto;margin:0 0 20px;font-family:Consolas,Monaco,monospace;">win.setIgnoreMouseEvents(true, { forward: true });</pre>
+
+<p style="margin:0 0 20px;">划重点：<strong style="color:#e8a58c;">这个判断放在主进程做，不要放在渲染层。</strong></p>
+
+<p style="margin:0 0 20px;">我一开始写在渲染进程里监听 <code style="background:#f2f2f2;padding:1px 5px;border-radius:3px;font-size:13px;">mousemove</code>，结果发现不可靠——窗口处于穿透状态时，渲染进程能不能收到事件本身就带不确定性。后来改成主进程用 <code style="background:#f2f2f2;padding:1px 5px;border-radius:3px;font-size:13px;">getCursorScreenPoint()</code> 每 60ms 轮询一次屏幕坐标，自己算鼠标有没有落在宠物矩形里。</p>
+
+<p style="margin:0 0 22px;">这样判断权和控制权在同一个进程，不会打架。</p>
+
+<p style="margin:0 0 14px;"><strong style="color:#e8a58c;">3. 拖拽不能局限于窗口内</strong></p>
+
+<p style="margin:0 0 20px;">CSS 提供的 <code style="background:#f2f2f2;padding:1px 5px;border-radius:3px;font-size:13px;">-webkit-app-region: drag</code> 在窗口边缘就会失效，拖出去松手还会卡住。</p>
+
+<p style="margin:0 0 20px;">真正的解法是主进程接管：按下时记录偏移量，然后每 16ms 读一次屏幕光标位置，强行把窗口钉到光标旁边。</p>
+
+<pre style="background:#f7f7f7;padding:13px 15px;border-radius:5px;font-size:13px;line-height:1.6;color:#555;overflow-x:auto;margin:0 0 20px;font-family:Consolas,Monaco,monospace;">dragTimer = setInterval(() =&gt; {
+  const c = screen.getCursorScreenPoint();
+  win.setPosition(c.x - offset.x, c.y - offset.y);
+}, 16);</pre>
+
+<p style="margin:0 0 22px;">因为窗口永远跟着光标走，光标相对窗口的位置恒定不变，所以松手事件一定能收回来——不会出现"拖出去松手它就永远粘住"的经典 bug。</p>
+
+<p style="margin:0 0 14px;"><strong style="color:#e8a58c;">4. 16 方向视线</strong></p>
+
+<p style="margin:0 0 20px;">这是我最满意的部分。</p>
+
+<p style="margin:0 0 20px;">素材里专门为"看"单独做了 16 张转头图（第 9、10 行），如果不做视线跟随，这两行就白瞎了。</p>
+
+<p style="margin:0 0 20px;">做法是主进程轮询鼠标位置，算出宠物到光标的向量：</p>
+
+<pre style="background:#f7f7f7;padding:13px 15px;border-radius:5px;font-size:13px;line-height:1.6;color:#555;overflow-x:auto;margin:0 0 20px;font-family:Consolas,Monaco,monospace;">let deg = Math.atan2(dx, -dy) * 180 / Math.PI;
+const index = Math.round(deg / 22.5) % 16;</pre>
+
+<p style="margin:0 0 20px;">角度从正上方 000° 起顺时针递增，每 22.5° 一档，正好映射到 16 个索引。</p>
+
+<p style="margin:0 0 20px;">索引 0-7 取第 9 行的对应帧，8-15 取第 10 行。渲染层收到索引就立刻换帧，750ms 没有新的方向变化再切回待机呼吸。</p>
+
+<p style="margin:0 0 22px;">结果就是：<strong style="color:#e8a58c;">它真的像有意识那样看着你的鼠标。</strong></p>
+
+<h2 style="font-size:19px;font-weight:bold;color:#1a1a1a;margin:34px 0 18px;border-left:4px solid #e8a58c;padding-left:11px;">打包：一个差点埋雷的细节</h2>
+
+<p style="margin:0 0 20px;">代码能跑不等于能交付。用户要的是"双击直开"，所以打包成了单文件便携版 exe——71MB，不装 Node、不装 Electron，扔到任何 Windows 机器上都能跑。</p>
+
+<p style="margin:0 0 20px;">应用图标也不是默认 Electron 图标，而是从精灵表第一帧裁出来的暖星的脸。</p>
+
+<pre style="background:#f7f7f7;padding:13px 15px;border-radius:5px;font-size:13px;line-height:1.6;color:#555;overflow-x:auto;margin:0 0 20px;font-family:Consolas,Monaco,monospace;">npm run build   # 输出 dist/暖星-便携版.exe</pre>
+
+<p style="margin:0 0 20px;">然后挖到一个<strong>很隐蔽的坑</strong>，值得单独说：</p>
+
+<p style="margin:0 0 20px;">便携版 exe 运行时，程序会被解压到临时目录再执行，这意味着此时的 <code style="background:#f2f2f2;padding:1px 5px;border-radius:3px;font-size:13px;">process.execPath</code> 指向的是<strong>临时目录里的副本</strong>，而不是你桌面上的那个 exe。</p>
+
+<p style="margin:0 0 20px;">如果按常规写法拿它去写开机自启：</p>
+
+<pre style="background:#f7f7f7;padding:13px 15px;border-radius:5px;font-size:13px;line-height:1.6;color:#555;overflow-x:auto;margin:0 0 20px;font-family:Consolas,Monaco,monospace;">// 错：便携版下这个路径是临时的，重启就失效
+app.setLoginItemSettings({ openAtLogin: true, path: process.execPath });</pre>
+
+<p style="margin:0 0 20px;">注册表里记的就是个一次性路径，<strong>重启电脑后自启静默失效</strong>，而且很难排查——因为开发时一切正常。</p>
+
+<p style="margin:0 0 20px;">正确做法是读 <code style="background:#f2f2f2;padding:1px 5px;border-radius:3px;font-size:13px;">process.env.PORTABLE_EXECUTABLE_FILE</code>，electron-builder 会用它告诉我们便携版 exe 的本尊在哪：</p>
+
+<pre style="background:#f7f7f7;padding:13px 15px;border-radius:5px;font-size:13px;line-height:1.6;color:#555;overflow-x:auto;margin:0 0 20px;font-family:Consolas,Monaco,monospace;">const target = process.env.PORTABLE_EXECUTABLE_FILE || process.execPath;</pre>
+
+<p style="margin:0 0 20px;">改完之后我去注册表里核对：</p>
+
+<pre style="background:#f7f7f7;padding:13px 15px;border-radius:5px;font-size:13px;line-height:1.6;color:#555;overflow-x:auto;margin:0 0 20px;font-family:Consolas,Monaco,monospace;">HKCU\Software\Microsoft\Windows\CurrentVersion\Run
+  electron.app.暖星 → F:\...\dist\暖星-便携版.exe</pre>
+
+<p style="margin:0 0 20px;">指向正确。</p>
+
+<p style="margin:0 0 22px;"><strong style="color:#e8a58c;">这类问题最阴的地方在于：它不报错，它只是悄悄不工作。</strong></p>
+
+<h2 style="font-size:19px;font-weight:bold;color:#1a1a1a;margin:34px 0 18px;border-left:4px solid #e8a58c;padding-left:11px;">它现在会干什么</h2>
+
+<p style="margin:0 0 14px;">· <strong>视线跟随</strong>：16 方向追着你的光标</p>
+<p style="margin:0 0 14px;">· <strong>拖拽</strong>：拖到哪站到哪，左右移动播放不同的奔跑动画</p>
+<p style="margin:0 0 14px;">· <strong>点一下</strong>：随机挥手 / 跳跃 / 举手，还会说话</p>
+<p style="margin:0 0 14px;">· <strong>右键菜单</strong>：摸头、喂食、陪我聊天、随手动作、提醒开关</p>
+<p style="margin:0 0 14px;">· <strong>定时提醒</strong>：喝水 45 分钟、久坐 1 小时、下班 18:30、晚间复盘 22:00</p>
+<p style="margin:0 0 22px;">· <strong>接大模型</strong>：配个 OpenAI 兼容的接口就能跟它聊天，回复显示在气泡里</p>
+
+<p style="margin:0 0 22px;">整套东西跑起来占用很低，平时你不碰它，它就是在右下角安静地待着。</p>
+
+<h2 style="font-size:19px;font-weight:bold;color:#1a1a1a;margin:34px 0 18px;border-left:4px solid #e8a58c;padding-left:11px;">一点感想</h2>
+
+<p style="margin:0 0 20px;">这个项目从"随便问问"到落地，真正难的地方全都不在 AI 帮我写了多少行代码，而在这些地方：</p>
+
+<p style="margin:0 0 14px;">· 素材找到了，怎么确认是正品（哈希）</p>
+<p style="margin:0 0 14px;">· 动画怎么动才对（找回原始帧时长）</p>
+<p style="margin:0 0 14px;">· 鼠标为什么放不透、拖不动（穿透和拖拽的控制权归属）</p>
+<p style="margin:0 0 20px;">· 明明写了开机自启，为什么重启后没反应（便携版的路径陷阱）</p>
+
+<p style="margin:0 0 20px;">前两个靠"查证而不是猜"，后两个靠动手实测。</p>
+
+<p style="margin:0 0 20px;">AI 最大的价值，是把"写代码"这件事的成本压到几乎为零，让你能把精力全部砸在<strong>验证</strong>和<strong>判断</strong>上。</p>
+
+<p style="margin:0 0 22px;">而最后决定这东西好不好的，恰恰是那些它没法替你猜的部分。</p>
+
+<section style="border-left:3px solid #e8a58c;padding:2px 0 2px 13px;color:#7a7a7a;margin:0 0 22px;">
+<p style="margin:0 0 10px;">项目已开源，里面有一键启动脚本、完整的配置说明和打包命令，拿去改造成你自己的宠物也很方便：</p>
+<p style="margin:0;">https://github.com/dongyliang748-coder/nuanxing-desktop-pet</p>
+</section>
+
+<p style="margin:0 0 0;">如果你手上也有一张没人要的精灵图，翻出来试试——它可能正等着被放回到桌面上。</p>
+
+</section>
+
+</body>
+</html>
