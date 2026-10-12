@@ -1,0 +1,21 @@
+node_modules/
+dist/
+config/
+win-unpacked/
+
+# 自检截图
+selfcheck-*.png
+
+# 系统垃圾
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 日志
+*.log
+npm-debug.log*
+yarn-error.log*
+
+# 本地环境残留
+.env
+.env.local

@@ -1,0 +1,49 @@
+{
+  "name": "nuanxing-pet",
+  "version": "1.0.0",
+  "description": "暖星 · 桌面宠物（Nuanxing Desktop Pet）",
+  "main": "main.js",
+  "author": "Nuanxing",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "icon": "electron scripts/make-icon.js",
+    "build": "electron-builder --win portable",
+    "build:installer": "electron-builder --win nsis"
+  },
+  "build": {
+    "appId": "com.nuanxing.desktop-pet",
+    "productName": "暖星",
+    "copyright": "Copyright © 2026 Nuanxing",
+    "icon": "assets/icon.ico",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "package.json",
+      "src/**/*",
+      "assets/spritesheet.png"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        }
+      ]
+    },
+    "portable": {
+      "artifactName": "暖星-便携版.exe"
+    },
+    "compression": "maximum",
+    "asar": true
+  },
+  "devDependencies": {
+    "electron": "^32.2.7",
+    "electron-builder": "^26.15.3"
+  }
+}

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; img-src 'self' data: file:; style-src 'self' 'unsafe-inline'; script-src 'self'"
+    />
+    <title>暖星</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="stage">
+      <!-- 对话气泡 -->
+      <div id="bubble" class="hidden">
+        <div id="bubble-text"></div>
+      </div>
+
+      <!-- 聊天输入 -->
+      <div id="chat" class="hidden">
+        <input id="chat-input" type="text" placeholder="跟暖星说点什么…" maxlength="200" />
+        <button id="chat-send" type="button">发送</button>
+      </div>
+
+      <!-- 宠物本体 -->
+      <canvas id="pet"></canvas>
+
+      <!-- 右键菜单 -->
+      <div id="menu" class="hidden"></div>
+    </div>
+
+    <script src="./pet.js"></script>
+  </body>
+</html>

@@ -1,0 +1,208 @@
+/* 暖星 · 桌面宠物 —— 渲染层样式（浅色主题） */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: transparent;
+  font-family: 'Microsoft YaHei', 'PingFang SC', 'Hiragino Sans GB', system-ui, sans-serif;
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: default;
+}
+
+#stage {
+  position: absolute;
+  inset: 0;
+}
+
+/* ---------- 宠物 ---------- */
+#pet {
+  position: absolute;
+  background: transparent;
+  cursor: grab;
+  -webkit-user-drag: none;
+}
+
+#pet.dragging {
+  cursor: grabbing;
+}
+
+/* ---------- 对话气泡 ---------- */
+#bubble {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: calc(100% - 20px);
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.97);
+  border: 1px solid rgba(226, 196, 178, 0.9);
+  box-shadow: 0 6px 18px rgba(120, 90, 70, 0.18);
+  color: #3b3330;
+  font-size: 13px;
+  line-height: 1.55;
+  word-break: break-word;
+  white-space: pre-wrap;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  z-index: 30;
+}
+
+/* 气泡小尾巴 */
+#bubble::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -7px;
+  width: 12px;
+  height: 12px;
+  margin-left: -6px;
+  background: rgba(255, 255, 255, 0.97);
+  border-right: 1px solid rgba(226, 196, 178, 0.9);
+  border-bottom: 1px solid rgba(226, 196, 178, 0.9);
+  transform: rotate(45deg);
+}
+
+#bubble.hidden {
+  opacity: 0;
+  transform: translateX(-50%) translateY(6px);
+  pointer-events: none;
+}
+
+#bubble-text {
+  max-height: 116px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+#bubble-text::-webkit-scrollbar {
+  width: 4px;
+}
+
+#bubble-text::-webkit-scrollbar-thumb {
+  background: rgba(200, 170, 150, 0.6);
+  border-radius: 2px;
+}
+
+/* ---------- 聊天输入 ---------- */
+#chat {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  padding: 6px;
+  width: calc(100% - 20px);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.97);
+  border: 1px solid rgba(226, 196, 178, 0.95);
+  box-shadow: 0 6px 18px rgba(120, 90, 70, 0.2);
+  z-index: 40;
+  transition: opacity 0.16s ease;
+}
+
+#chat.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+#chat-input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 13px;
+  color: #3b3330;
+  font-family: inherit;
+  padding: 4px 6px;
+}
+
+#chat-input::placeholder {
+  color: #b3a49b;
+}
+
+#chat-send {
+  flex: none;
+  border: none;
+  border-radius: 8px;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-family: inherit;
+  color: #fff;
+  background: #e8a58c;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+#chat-send:hover {
+  background: #dd9377;
+}
+
+#chat-send:disabled {
+  background: #d8cfc9;
+  cursor: default;
+}
+
+/* ---------- 右键菜单 ---------- */
+#menu {
+  position: absolute;
+  min-width: 148px;
+  padding: 5px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.99);
+  border: 1px solid rgba(226, 196, 178, 0.95);
+  box-shadow: 0 8px 22px rgba(120, 90, 70, 0.22);
+  z-index: 50;
+  transition: opacity 0.12s ease;
+}
+
+#menu.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 9px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  color: #3b3330;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.menu-item:hover {
+  background: #fdf1ea;
+}
+
+.menu-item .hint {
+  font-size: 11px;
+  color: #b3a49b;
+}
+
+.menu-item .check {
+  font-size: 11px;
+  color: #e8a58c;
+}
+
+.menu-sep {
+  height: 1px;
+  margin: 4px 6px;
+  background: rgba(226, 196, 178, 0.7);
+}
+
+.menu-item.danger {
+  color: #c9705a;
+}
