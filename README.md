@@ -1,5 +1,7 @@
 # 暖星 · 桌面宠物
 
+> 仓库：https://github.com/dongyliang748-coder/nuanxing-desktop-pet
+
 一只常驻在桌面右下角的 Q 版陪伴宠物。素材沿用你原来的「暖星」v2 精灵表，动画节奏按资产清单里的逐帧时长 1:1 还原。
 
 ## 快速开始
